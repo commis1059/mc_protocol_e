@@ -1,0 +1,3 @@
+---
+inherit_from:
+  - https://gist.githubusercontent.com/commis1059/5ce7db028de5fe00fe88392ff7a95278/raw/c00065917dada0e4aa40669fcde90411e70ce82c/.rubocop.yml
