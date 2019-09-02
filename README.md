@@ -84,7 +84,7 @@ req =
 McProtocolE::Client.start(address: opts["h"], port: opts["p"].to_i) {|client|
   pp req.to_b
   res = client.request(req)
-  pp res.map {|raw| raw.unpack("s").first }
+  pp res.map {|raw| raw.unpack1("s") }
 }
 
 ```
@@ -99,7 +99,9 @@ McProtocolE::Client.start(address: opts["h"], port: opts["p"].to_i) {|client|
 * Support only below commands.
     * Batch read in word units (0401)
     * Batch write in word units (1401)
-
+    * Batch read in multiple units (0406)
+        * I have not tested on actual machines
+    
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).

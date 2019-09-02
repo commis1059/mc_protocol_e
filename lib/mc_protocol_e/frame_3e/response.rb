@@ -14,7 +14,7 @@ module McProtocolE
       MAX_RECV_LEN = 1024 * 1024
       SUCCEED_CODE = 0
 
-      attr_reader :data
+      attr_reader :code, :data
 
       # Constructor.
       # @param [String] raw_res binary string of response
@@ -47,10 +47,6 @@ module McProtocolE
       def failed?
         !succeed?
       end
-
-      private
-
-      attr_reader :code
 
     end
   end

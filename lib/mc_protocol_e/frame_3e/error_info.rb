@@ -20,7 +20,7 @@ module McProtocolE
       # Returns binary string.
       # @return [String] binary string
       def to_s
-        "code: #{code} command: #{command.class.name} #{access_route}"
+        "code: #{code.to_s(16)} command: #{command.class.name} #{access_route}"
       end
 
       private

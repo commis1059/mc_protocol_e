@@ -57,5 +57,5 @@ req =
 McProtocolE::Client.start(address: opts["h"], port: opts["p"].to_i) {|client|
   pp req.to_b
   res = client.request(req)
-  pp res.map {|raw| raw.unpack("s").first }
+  pp res.map {|raw| raw.unpack1("s") }
 }

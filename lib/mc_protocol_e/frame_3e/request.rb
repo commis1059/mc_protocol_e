@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'batch_read_in_multiple'
 require_relative 'batch_read_in_word'
 require_relative 'batch_write_in_word'
 require_relative 'response'
@@ -23,18 +24,26 @@ module McProtocolE
         @command = command
       end
 
-      # Returns a request to batch read.
+      # Returns a request to batch read in multiple.
       # @param [AccessRoute] access_route access route
       # @param [Numeric] wait_sec waiting second
-      # @param [DeviceRange] device_range device_range
+      # @param [Array<DeviceRange>] device_ranges device ranges
+      def self.batch_read_in_multiple(access_route:, wait_sec:, device_ranges:)
+        new(access_route: access_route, wait_sec: wait_sec, command: BatchReadInMultiple.new(device_ranges: device_ranges))
+      end
+
+      # Returns a request to batch read in word.
+      # @param [AccessRoute] access_route access route
+      # @param [Numeric] wait_sec waiting second
+      # @param [DeviceRange] device_range device range
       def self.batch_read_in_word(access_route:, wait_sec:, device_range:)
         new(access_route: access_route, wait_sec: wait_sec, command: BatchReadInWord.new(device_range: device_range))
       end
 
-      # Returns a request to batch write.
+      # Returns a request to batch write in word.
       # @param [AccessRoute] access_route access route
       # @param [Numeric] wait_sec waiting second
-      # @param [DeviceRange] device_range device_range
+      # @param [DeviceRange] device_range device range
       # @param [Array] values values to write
       def self.batch_write_in_word(access_route:, wait_sec:, device_range:, values:)
         new(access_route: access_route, wait_sec: wait_sec, command: BatchWriteInWord.new(device_range: device_range, values: values))
