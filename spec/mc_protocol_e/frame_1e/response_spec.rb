@@ -23,14 +23,21 @@ describe Response do
     }
 
     context "when IO.select returned sockets" do
-      it { is_expected.to be_a McProtocolE::Frame1e::Response }
+      context "when raw response is present" do
+        it { is_expected.to be_a McProtocolE::Frame1e::Response }
+      end
+
+      context "when raw response is empty" do
+        let(:raw_res) { "" }
+        it { expect { subject}.to raise_error described_class::InvalidResponseError }
+      end
     end
 
     context "when IO.select returned nil" do
       before {
         allow(IO).to receive(:select).and_return(nil)
       }
-      it { expect { subject }.to raise_error McProtocolE::Frame1e::Response::TimeoutError }
+      it { expect { subject }.to raise_error described_class::ReadTimeoutError }
     end
   end
 

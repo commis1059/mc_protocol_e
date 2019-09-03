@@ -7,7 +7,8 @@ module McProtocolE
     # This class shows a responce of MC protocol.
     class Response
 
-      class TimeoutError < Timeout::Error; end
+      class ReadTimeoutError < Timeout::Error; end
+      class InvalidResponseError < StandardError; end
 
       DEFAULT_READ_TIMEOUT = 3
       SUB_HEADER = "\xD0\x00".b
@@ -22,7 +23,7 @@ module McProtocolE
         @sub_header = raw_res[0..1]
         @access_route = raw_res[2..6]
         @response_len = raw_res[7..8]
-        @code = raw_res[9..10].unpack1("v")
+        @code = raw_res[9..10]&.unpack1("v")
         @data = raw_res[11..-1] || ""
       end
 
@@ -30,12 +31,16 @@ module McProtocolE
       # @param [IO] socket TCP socket
       # @param [Integer] read_timeout read timeout second
       # @return [Responce] received a response
+      # @raise [ReadTimeoutError] occurred timeout when response read
+      # @raise [InvalidResponseError] when response is invalid mc protocol format
       def self.recv(socket, read_timeout = DEFAULT_READ_TIMEOUT)
         selected = IO.select([socket], nil, nil, read_timeout)
-        raise TimeoutError unless selected
+        raise ReadTimeoutError unless selected
 
         raw_res = socket.recv(MAX_RECV_LEN)
-        new(raw_res)
+        res = new(raw_res)
+        raise InvalidResponseError if res.code.nil?
+        res
       end
 
       # Returns true if a command succeed.
